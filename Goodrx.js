@@ -218,15 +218,37 @@ function scrapeItems($, url) {
     let drugdesc = $('div.long-druginfo').text().trim();
     let noPrescription = $('div.drug-footer.-otc');
 
-
-    if (url.includes("override")) {
-        /*check to if we are on the drug page */
-
         if (dosagy != "") {
             let doseg = $('div#configPanel div#dosage ul li a');
+            if (url.includes("override")) {
+                 console.log("*************************** loading brandname")
+        let doseg = $('div#configPanel div#dosage ul li a')
+        if (doseg) {
+            // get dosages for the page
+            doseg.each(function() {
+                let dosag = $(this).text().trim();
+                otherDoses.push(dosag);
+            });
 
+            variousNames.drug = $(this).find('a').text();
+            variousNames.dosage = otherDoses;
+            console.log(variousNames);
+            var itemsdg = {
+                drug: drugy,
+                names: variousNames
+            }
+
+            // saving the name details to a database
+            /*dbo.collection("drugbrands").insertOne(itemsdg, function(err, res) {
+                console.log("1 document inserted for " + itemsdg.drugy);
+            });*/
+            otherDoses = [];
+        }
+            }
+        /*check to if we are on the drug page */
             //check  if the dosage div exists
-            if (doseg != "") {
+            else{
+                if (doseg != "") {
                 doseg.each(function() {
                     let dosag = $(this).text().trim();
                     dosagi.push(dosag);
@@ -256,6 +278,7 @@ function scrapeItems($, url) {
                 dosagi = [];
 
             }
+
             // saving condition and its drug arrays to mongo
             if (drugz.length <= 0) {
                 var items = {
@@ -273,6 +296,9 @@ function scrapeItems($, url) {
             }
 
         }
+            }
+            
+            
         //check if there is no data of drug dosages and quantity
 
         if (noPrescription != "") {
@@ -301,31 +327,6 @@ function scrapeItems($, url) {
             }
 
         }
-    } else {
-
-        console.log("*************************** loading brandname")
-        let doseg = $('div#configPanel div#dosage ul li a')
-        if (doseg) {
-            // get dosages for the page
-            doseg.each(function() {
-                let dosag = $(this).text().trim();
-                otherDoses.push(dosag);
-            });
-
-            variousNames.drug = $(this).find('a').text();
-            variousNames.dosage = otherDoses;
-            console.log(variousNames);
-            var itemsdg = {
-                drug: drugy,
-                names: variousNames
-            }
-
-            // saving the name details to a database
-            /*dbo.collection("drugbrands").insertOne(itemsdg, function(err, res) {
-                console.log("1 document inserted for " + itemsdg.drugy);
-            });*/
-            otherDoses = [];
-        }
-    }
+   
 
 }
