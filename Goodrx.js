@@ -140,6 +140,9 @@ function collectlinks($, url) {
             let drugnames = $('div#configPanel div#drug ul.config-options li ');
             var strings = url.split('/');
             var theDrg = strings[strings.length-1];
+             if(theDrg.includes('?')){
+                 return;
+              }
             drugnames.each(function() {
 
                 let drgbrands = $(this).find('a').attr('slug');
