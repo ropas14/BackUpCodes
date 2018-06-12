@@ -131,43 +131,46 @@ function collectlinks($, url) {
     }
     // quering the url of a drug brand name
     if (drgPanel) {
-        let drugi = $('div#configPanel div#drug[class*="-disabled"]');
-        if (!drugi) {
-            console.log("????????????????????????????????????????????????????????????????????????? we are here")
+        console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee?????????????????????????????????????? we are here")
+        let drugi = $('div#configPanel div#drug[class*="-disabled"]').text().trim();
+          console.log('=='+drugi);
+        if (drugi) {
+           }else{
+          console.log("in the loop ###########################################################################")
             let drugnames = $('div#configPanel div#drug ul.config-options li ');
+            var strings = url.split('/');
+            var theDrg = strings[strings.length-1];
             drugnames.each(function() {
-                console.log("in the loop ###########################################################################")
+
                 let drgbrands = $(this).find('a').attr('slug');
                 let dg, brnd;
                 let dsg = $('div#configPanel div#dosage').attr('selecteditem');
                 let qnty = $('div#configPanel  div#quantity').attr('selecteditem');
-                dg = drugy;
+                dg = theDrg;
                 brnd = drgbrands;
-                if (drugy.indexOf(" ") > 1 || dsg.indexOf(" ") > 1 || drgbrands.indexOf(" ") > 1) {
-                    dg = drugy.split(" ").join("-");
+                if (dg.indexOf(" ") > 1 || dsg.indexOf(" ") > 1 || drgbrands.indexOf(" ") > 1) {
+                    dg = dg.split(" ").join("-");
                     brnd = drgbrands.split(" ").join("-");
                     dsg = dsg.split(" ").join("-");
 
                 }
-                if (drugy.indexOf("'") > 1 || dsg.indexOf("'") > 1 || drgbrands.indexOf("'") > 1) {
-                    dg = drugy.split("'").join("-");
+                if (dg.indexOf("'") > 1 || dsg.indexOf("'") > 1 || drgbrands.indexOf("'") > 1) {
+                    dg = dg.split("'").join("-");
                     brnd = drgbrands.split("'").join("-");
                     dsg = dsg.split("'").join("-");
                 }
-                if (drugy.indexOf("/") > 1 || dsg.indexOf("/") > 1 || drgbrands.indexOf("/") > 1) {
-                    dg = drugy.split("/").join("-");
+                if (dg.indexOf("/") > 1 || dsg.indexOf("/") > 1 || drgbrands.indexOf("/") > 1) {
+                    dg = dg.split("/").join("-");
                     brnd = drgbrands.split("/").join("-");
                     dsg = dsg.split("/").join("-");
                 }
 
 
                 //url query for various drug names of a certain drug
-
+                //https://www.goodrx.com/zazole?drug-name=zazole&form=tablet&dosage=45g-of-0.4%25&quantity1&days_supply=&label_override=terazol-3
                 let nmeUrl = baseUrl + "/" + dg + "?drug-name=" + dg + "&form=tablet&dosage=" + dsg + "&quantity" + qnty + "&days_supply=&label_override=" + brnd;
                 console.log(nmeUrl);
                 pagesToVisit.push(nmeUrl);
-
-
             });
 
         }
@@ -216,7 +219,7 @@ function scrapeItems($, url) {
     let noPrescription = $('div.drug-footer.-otc');
 
 
-    if (url.indexOf("override") === -1) {
+    if (url.includes("override")) {
         /*check to if we are on the drug page */
 
         if (dosagy != "") {
@@ -292,7 +295,7 @@ function scrapeItems($, url) {
                      console.log("1 document inserted. " + numItems + " records in db");
                  });*/
                 console.log("The Saving part");
-                conditiony = ""; // clearing 
+                conditiony = ""; // clearing
                 drugDetail = []; // clearing drugDetail array
 
             }
